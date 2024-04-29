@@ -1,0 +1,8 @@
+Flask
+flask-cors
+flask-sslify
+requests
+python-dotenv
+weasyprint
+selenium
+webdriver_manager

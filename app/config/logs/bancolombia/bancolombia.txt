@@ -1,0 +1,94 @@
+
+##############################
+
+
+Fecha   : 2024-04-29 19:43:44
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : Message: Expected browser binary location, but unable to find binary in default location, no 'moz:firefoxOptions.binary' capability provided, and no binary flag set on the command line
+
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 20:03:11
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : Message: Expected browser binary location, but unable to find binary in default location, no 'moz:firefoxOptions.binary' capability provided, and no binary flag set on the command line
+
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 21:14:46
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : strptime() argument 1 must be str, not WebElement
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 21:24:56
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : time data '<selenium.webdriver.remote.webelement.WebElement (session="05cf035c-94ff-4f9d-b3fa-0a154d4c4331", element="63bfd16d-99a3-496c-9b7c-0d3b20bf1a2d")>' does not match format '%Y-%m-%d'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
