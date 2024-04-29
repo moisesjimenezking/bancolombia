@@ -1,6 +1,6 @@
 from createApp import app
-from flask import jsonify, make_response
-
+from flask import jsonify, make_response, send_file
+import os
 from modules.bancolombia import controller
 
 
@@ -41,6 +41,24 @@ def healthcheck():
     response.headers['Accept-Encoding'] = 'gzip'
     return response
 
+
+@app.route('/pdf/<path:filename>')
+def generate_pdf(filename):
+    ruteLog = "config/logs/movements/"+filename
+    if not os.path.exists(ruteLog):
+        response = {
+            'response':{'message': "Archivo no encontrado."},
+            'status_http': 404
+        }
+        
+        response = make_response(jsonify(response["response"]), response["status_http"])
+        response.headers['Content-Type'] = 'application/json'
+        response.headers['Accept-Encoding'] = 'gzip'
+
+    else:
+        response = send_file("config/logs/movements/"+filename, as_attachment=False)
+    
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

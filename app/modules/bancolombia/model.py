@@ -9,6 +9,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import TimeoutException
 from weasyprint import HTML
+from fpdf import FPDF
+from flask import request
 import time
 import logging
 import os
@@ -77,38 +79,36 @@ class ScriptBancolombia:
         while True:
             end = False
             listMovements = list()
+            strMovements = ""
+            time.sleep(2)
             table_element = cls.wait.until(EC.presence_of_element_located((By.ID, 'tblMyMovements')))
             rows = table_element.find_elements(By.TAG_NAME, 'tr')
 
             for row in rows:
                 columns = row.find_elements(By.TAG_NAME, 'td')
-                logging.debug(str(columns))
-                if len(columns) >= 1:
-                    date = datetime.strptime(str(columns[0]), "%Y-%m-%d")
-                    if date.strftime("%Y-%m-%d") in cls.listTime:
+                columns = [column.text for column in columns]
+                if len(columns) >= 1 and len(columns[0]) > 1:
+                    date = datetime.strptime(columns[0], "%Y-%m-%d")
+                    date = date.strftime("%Y-%m-%d")
+                    if date in cls.listTime:
                         listMovements.append({
                             "date":columns[0],
                             "amount":columns[1],
                             "description":columns[2],
                         })
+                        strMovements = strMovements + "{} | {} | {} \n".format(columns[0], columns[1], columns[2])
                     else:
                         end = True
+                        break
             
             if end:
-                table_html = table_element.get_attribute('outerHTML')
-                with open('temp.html', 'w') as f:
-                    f.write(table_html)
-
-                # Convertir el archivo HTML a PDF con WeasyPrint
-                archive = 'movimientos_{}.pdf'.format(datetime.now().strftime("%Y-%m-%d"))
-                HTML('temp.html').write_pdf(archive)
-                os.remove('temp.html')
                 break
-            else:
-                buttonNext = cls.wait.until(EC.presence_of_element_located((By.ID, 'u-moreMovements-movements')))
-                buttonNext.click()
 
-        return {"movements":listMovements, "archive":archive}
+            buttonNext = cls.wait.until(EC.presence_of_element_located((By.ID, 'u-moreMovements-movements')))
+            buttonNext.click()
+
+
+        return {"movements":listMovements, "text":strMovements}
 
     @classmethod
     def cashierKey(cls):
@@ -157,9 +157,43 @@ class BanKColom:
 
         listTime = [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]
 
-        response = ScriptBancolombia.initialize(listTime)
+        result = ScriptBancolombia.initialize(listTime)
 
+        rute = cls.buildPdf(result["movements"])
+        response = {"text":result["text"], "file_url":rute["rute"]}
         return {
             "response":response,
             "status_http":200
         }
+    
+    @classmethod
+    def buildPdf(cls, data):
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=10)
+
+        col_widths = [10, 30, 40, 100]
+
+        pdf.cell(col_widths[0], 10, "Nª", border=1, align='C')
+        pdf.cell(col_widths[1], 10, "Fecha", border=1, align='C')
+        pdf.cell(col_widths[2], 10, "Monto", border=1, align='C')
+        pdf.cell(col_widths[3], 10, "Descripción", border=1, ln=True, align='C')
+        
+        aux = 1
+        for item in data:
+            pdf.cell(col_widths[0], 10, f"#{aux}", border=1, align='C')
+            pdf.cell(col_widths[1], 10, item['date'], border=1, align='C')
+            pdf.cell(col_widths[2], 10, item['amount'], border=1, align='C')
+            pdf.cell(col_widths[3], 10, item['description'], border=1, ln=True, align='C')
+
+            aux += 1
+
+        ruteLog = "config/logs/movements/"
+        if not os.path.exists(ruteLog):
+            os.makedirs(ruteLog)
+
+        archive = "movimientos_{}.pdf".format(datetime.now().strftime("%Y-%m-%d"))
+        # Guardar el PDF en un archivo
+        pdf.output(ruteLog+archive)
+
+        return {"rute":"{}pdf/{}".format(request.host_url, archive)}

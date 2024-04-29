@@ -6,3 +6,4 @@ python-dotenv
 weasyprint
 selenium
 webdriver_manager
+fpdf

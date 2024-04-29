@@ -92,3 +92,251 @@ query   : {'start_date': '2024-04-27'}
 ##############################
 
 
+
+##############################
+
+
+Fecha   : 2024-04-29 21:31:07
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : 'list' object has no attribute 'text'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 21:34:07
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : 'WebElement' object has no attribute 'txt'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 21:36:33
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : 'str' object has no attribute 'text'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 21:47:10
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : time data '' does not match format '%Y-%m-%d'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 21:50:57
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : Message: 
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:187:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:505:5
+element.find/</<@chrome://remote/content/marionette/element.sys.mjs:135:16
+
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-27'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 22:10:12
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : Could not reach host. Are you offline?
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-29'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 22:15:45
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : Message: 
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:187:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:505:5
+element.find/</<@chrome://remote/content/marionette/element.sys.mjs:135:16
+
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-29'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 22:18:16
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : Message: 
+Stacktrace:
+RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8
+WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:187:5
+NoSuchElementError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:505:5
+element.find/</<@chrome://remote/content/marionette/element.sys.mjs:135:16
+
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-29'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 23:47:52
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : cell() got an unexpected keyword argument 'bord2er'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-29'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-29 23:48:43
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : cell() got an unexpected keyword argument 'bord2er'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-29'}
+
+##############################
+
+
