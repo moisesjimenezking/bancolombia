@@ -39,7 +39,17 @@ class ScriptBancolombia:
 
         cls.driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
 
-        response = cls.login()
+        error = False
+
+        try:
+            response = cls.login()
+        except Exception as e:
+            cls.driver.quit()
+            error = True
+
+        if error:
+            raise Exception("Fallo el web Scraping", 400)
+
         time.sleep(1.5)
         cls.driver.quit()
         return response
@@ -151,20 +161,53 @@ class BanKColom:
     def consult(cls, data):
         if "start_date" not in data:
             data["start_date"] = datetime.now().strftime("%Y-%m-%d")
+        
+        # ruteLog = "config/logs/movements_cache/cache_{}.txt".format(data["start_date"])
+        # if os.path.exists(ruteLog):
+        #     createTime = os.path.getctime(ruteLog)
+        #     currentTime = time.time()
+        #     if currentTime - createTime > 180:
+        #         os.remove(ruteLog)
+
+        #     else:
+        #         response = json.decode
+        #     os.makedirs(ruteLog)
 
         start_date = datetime.strptime(data["start_date"], "%Y-%m-%d")
         end_date  = (start_date - timedelta(days=1))
 
         listTime = [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]
 
+        file_path = '/root/.wdm/drivers/geckodriver/linux64/v0.34.0/geckodriver'
+
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            logging.debug(f"El archivo {file_path} ha sido eliminado.")
+        else:
+            logging.debug(f"El archivo {file_path} no existe.")
+
         result = ScriptBancolombia.initialize(listTime)
 
         rute = cls.buildPdf(result["movements"])
-        response = {"text":result["text"], "file_url":rute["rute"]}
+        text = cls.buildText(result["text"])
+
+        response = {"text":text["text"], "file_url":rute["rute"]}
+
+        ruteLog = "config/logs/movements/"
+        if not os.path.exists(ruteLog):
+            os.makedirs(ruteLog)
+
         return {
             "response":response,
             "status_http":200
         }
+    
+    @classmethod
+    def buildText(cls, data):
+        listText = data.split("\n")
+        listText = listText[:10]
+        text = " \n".join(listText)
+        return {"text":text}
     
     @classmethod
     def buildPdf(cls, data):
@@ -196,4 +239,4 @@ class BanKColom:
         # Guardar el PDF en un archivo
         pdf.output(ruteLog+archive)
 
-        return {"rute":"{}pdf/{}".format(request.host_url, archive.replace(".pdf", ""))}
+        return {"rute":"{}pdf/{}".format(request.host_url, archive)}

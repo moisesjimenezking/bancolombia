@@ -372,3 +372,72 @@ query   : {'start_date': '2024-04-29'}
 ##############################
 
 
+
+##############################
+
+
+Fecha   : 2024-04-30 14:36:40
+
+Mensaje : Fallo el web Scraping
+
+Error   : ('Fallo el web Scraping', 400)
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 14:38:38
+
+Mensaje : Fallo el web Scraping
+
+Error   : ('Fallo el web Scraping', 400)
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 14:38:39
+
+Mensaje : Fallo el web Scraping
+
+Error   : ('Fallo el web Scraping', 400)
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
