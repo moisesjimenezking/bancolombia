@@ -44,6 +44,9 @@ def healthcheck():
 
 @app.route('/pdf/<path:filename>')
 def generate_pdf(filename):
+    if ".pdf" not in filename:
+        filename = filename+".pdf"
+        
     ruteLog = "config/logs/movements/"+filename
     if not os.path.exists(ruteLog):
         response = {
@@ -57,6 +60,7 @@ def generate_pdf(filename):
 
     else:
         response = send_file("config/logs/movements/"+filename, as_attachment=False)
+        response.headers['Content-Type'] = 'application/pdf'
     
     return response
 

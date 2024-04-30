@@ -196,4 +196,4 @@ class BanKColom:
         # Guardar el PDF en un archivo
         pdf.output(ruteLog+archive)
 
-        return {"rute":"{}pdf/{}".format(request.host_url, archive)}
+        return {"rute":"{}pdf/{}".format(request.host_url, archive.replace(".pdf", ""))}
