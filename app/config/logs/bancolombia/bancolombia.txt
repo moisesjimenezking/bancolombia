@@ -441,3 +441,141 @@ query   : {'start_date': '2024-04-30'}
 ##############################
 
 
+
+##############################
+
+
+Fecha   : 2024-04-30 15:14:14
+
+Mensaje : 2
+
+Error   : [Errno 2] No such file or directory: 'config/logs/movements_cache/cache_2024-04-30.txt'
+
+Estatus : No such file or directory
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 15:19:13
+
+Mensaje : 2
+
+Error   : [Errno 2] No such file or directory: 'config/logs/movements_cache/cache_2024-04-30.txt'
+
+Estatus : No such file or directory
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 15:21:50
+
+Mensaje : 21
+
+Error   : [Errno 21] Is a directory: 'config/logs/movements_cache/'
+
+Estatus : Is a directory
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 15:22:50
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : module 'json' has no attribute 'decode'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 15:23:52
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : module 'json' has no attribute 'encode'
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-04-30 15:35:56
+
+Mensaje : Fallo el web Scraping
+
+Error   : ('Fallo el web Scraping', 400)
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult
+    
+origin  : 172.17.0.1
+
+query   : {'start_date': '2024-04-30'}
+
+##############################
+
+

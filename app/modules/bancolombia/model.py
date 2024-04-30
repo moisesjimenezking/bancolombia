@@ -14,6 +14,7 @@ from flask import request
 import time
 import logging
 import os
+import json
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -162,22 +163,52 @@ class BanKColom:
         if "start_date" not in data:
             data["start_date"] = datetime.now().strftime("%Y-%m-%d")
         
-        # ruteLog = "config/logs/movements_cache/cache_{}.txt".format(data["start_date"])
-        # if os.path.exists(ruteLog):
-        #     createTime = os.path.getctime(ruteLog)
-        #     currentTime = time.time()
-        #     if currentTime - createTime > 180:
-        #         os.remove(ruteLog)
+        newCache = False
 
-        #     else:
-        #         response = json.decode
-        #     os.makedirs(ruteLog)
+        ruteLog = "config/logs/movements_cache/cache_{}.txt".format(data["start_date"])
+        if os.path.exists(ruteLog):
+            createTime = os.path.getctime(ruteLog)
+            currentTime = time.time()
+            if currentTime - createTime < 180:
+                with open(ruteLog, 'r') as archivo:
+                    content = archivo.read()
+                
+                response = eval(content)
+            else:
+                os.remove(ruteLog)
+                newCache = True
+        else:
+            newCache = True
 
-        start_date = datetime.strptime(data["start_date"], "%Y-%m-%d")
-        end_date  = (start_date - timedelta(days=1))
+        if newCache:
+            start_date = datetime.strptime(data["start_date"], "%Y-%m-%d")
+            end_date  = (start_date - timedelta(days=1))
 
-        listTime = [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]
+            listTime = [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]
 
+            cls.removeGeko()
+
+            result = ScriptBancolombia.initialize(listTime)
+
+            rute = cls.buildPdf(result["movements"])
+            text = cls.buildText(result["text"])
+
+            response = {"text":text["text"], "file_url":rute["rute"]}
+
+            ruteDirectori = "config/logs/movements_cache/"
+            if not os.path.exists(ruteDirectori):
+                os.makedirs(ruteDirectori)
+
+            with open(ruteLog, 'w') as archivo:
+                archivo.write(json.dumps(response))
+
+        return {
+            "response":response,
+            "status_http":200
+        }
+    
+    @classmethod
+    def removeGeko(cls):
         file_path = '/root/.wdm/drivers/geckodriver/linux64/v0.34.0/geckodriver'
 
         if os.path.exists(file_path):
@@ -186,22 +217,6 @@ class BanKColom:
         else:
             logging.debug(f"El archivo {file_path} no existe.")
 
-        result = ScriptBancolombia.initialize(listTime)
-
-        rute = cls.buildPdf(result["movements"])
-        text = cls.buildText(result["text"])
-
-        response = {"text":text["text"], "file_url":rute["rute"]}
-
-        ruteLog = "config/logs/movements/"
-        if not os.path.exists(ruteLog):
-            os.makedirs(ruteLog)
-
-        return {
-            "response":response,
-            "status_http":200
-        }
-    
     @classmethod
     def buildText(cls, data):
         listText = data.split("\n")
