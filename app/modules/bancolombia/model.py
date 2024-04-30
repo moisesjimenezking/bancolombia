@@ -40,18 +40,18 @@ class ScriptBancolombia:
 
         cls.driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
 
-        error = False
+        # error = False
 
-        try:
-            response = cls.login()
-        except Exception as e:
-            cls.driver.quit()
-            error = True
+        # try:
+        response = cls.login()
+        # except Exception as e:
+        #     cls.driver.quit()
+        #     error = True
 
-        if error:
-            raise Exception("Fallo el web Scraping", 400)
+        # if error:
+        #     raise Exception("Fallo el web Scraping", 400)
 
-        time.sleep(1.5)
+        time.sleep(1)
         cls.driver.quit()
         return response
 
@@ -61,25 +61,25 @@ class ScriptBancolombia:
         cls.wait = WebDriverWait(cls.driver, 15)
 
         cls.loginNit()
-        time.sleep(1.5)
+        time.sleep(1)
 
         cls.loginCC()
-        time.sleep(1.5)
+        time.sleep(1)
         
         #* Presionar el boton de continuar
         buttonLogin = cls.wait.until(EC.presence_of_element_located((By.XPATH, '//button[@id="button-continue-login"]')))
         buttonLogin.click()
-        time.sleep(1.5)
+        time.sleep(1)
 
         cls.cashierKey()
-        time.sleep(1.5)
+        time.sleep(1)
 
         #* Aceder a la lista de movimientos
         buttonMovements = cls.wait.until(EC.presence_of_element_located((By.XPATH, '//a[contains(text(), "Consultas")]')))
         buttonMovements.click()
         buttonMovements = cls.wait.until(EC.presence_of_element_located((By.XPATH, '//a[@id="button-dashboard-movements"]')))
         buttonMovements.click()
-        time.sleep(1.5)
+        time.sleep(1)
 
         #* Obtener movimientos
         response = cls.movements()
@@ -91,7 +91,7 @@ class ScriptBancolombia:
             end = False
             listMovements = list()
             strMovements = ""
-            time.sleep(2)
+            time.sleep(5)
             table_element = cls.wait.until(EC.presence_of_element_located((By.ID, 'tblMyMovements')))
             rows = table_element.find_elements(By.TAG_NAME, 'tr')
 
@@ -169,7 +169,7 @@ class BanKColom:
         if os.path.exists(ruteLog):
             createTime = os.path.getctime(ruteLog)
             currentTime = time.time()
-            if currentTime - createTime < 180:
+            if currentTime - createTime < 90:
                 with open(ruteLog, 'r') as archivo:
                     content = archivo.read()
                 
@@ -221,7 +221,11 @@ class BanKColom:
     def buildText(cls, data):
         listText = data.split("\n")
         listText = listText[:10]
-        text = " \n".join(listText)
+
+        text = ""
+        for x in range(len(listText)):
+            text = text + "#{} | {} \n".format(x+1, listText[x])
+
         return {"text":text}
     
     @classmethod
