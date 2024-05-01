@@ -226,14 +226,16 @@ class BanKColom:
     
     @classmethod
     def removeGeko(cls):
-        file_path = '/root/.wdm/drivers/geckodriver/linux64/v0.34.0/geckodriver'
-
-        if os.path.exists(file_path):
-            os.remove(file_path)
-            logging.debug(f"El archivo {file_path} ha sido eliminado.")
-        else:
-            logging.debug(f"El archivo {file_path} no existe.")
-
+        try:
+            file_path = '/root/.wdm/drivers/geckodriver/linux64/v0.34.0/geckodriver'
+            if os.path.exists(file_path):
+                os.remove(file_path)
+                logging.debug(f"El archivo {file_path} ha sido eliminado.")
+            else:
+                logging.debug(f"El archivo {file_path} no existe.")
+        except Exception:
+            pass
+        
     @classmethod
     def buildText(cls, data):
         listText = data.split("\n")
