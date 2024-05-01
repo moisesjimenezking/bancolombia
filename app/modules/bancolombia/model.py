@@ -185,9 +185,14 @@ class BanKColom:
 
         if response["file_url"] is None:
             files = [file for file in os.listdir("config/logs/movements/") if file.endswith(f"_{nit}.pdf")]
+            filesAux = [file for file in os.listdir("config/logs/movements/") if file.endswith(f".pdf") and start_date in file]
             newest_file = None
             if len(files) > 0:
                 newest_file = host+"pdf/"+files[0]
+            else:
+                if len(filesAux) > 0:
+                    newest_file = host+"pdf/"+filesAux[0]
+
 
             response["file_url"] = newest_file
 
