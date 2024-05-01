@@ -35,29 +35,18 @@ class ScriptBancolombia:
         cls.NIT   = account["nit"] if "nit" in account else cls.NIT
         cls.boxCC = account["boxCc"] if "boxCc" in account else cls.boxCC
 
-        for x in range(3):
-            user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-            options = Options()
-            options.add_argument("--headless")
-            options.add_argument(f"--user-agent={user_agent}")
-            options.add_argument("--disable-blink-features=AutomationControlled")
-            options.binary_location = "/usr/bin/firefox-esr"
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
+        options = Options()
+        options.add_argument("--headless")
+        options.add_argument(f"--user-agent={user_agent}")
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        options.binary_location = "/usr/bin/firefox-esr"
 
-            cls.driver = webdriver.Firefox(
-                service=FirefoxService(GeckoDriverManager().install()), options=options
-            )
-            
-            try:
-                response = cls.login()
-                continueWhile = False
-            except Exception:
-                cls.driver.quit()
-                continueWhile = True
-
-            if not continueWhile:
-                break
-
-            BanKColom.removeGeko()
+        cls.driver = webdriver.Firefox(
+            service=FirefoxService(GeckoDriverManager().install()), options=options
+        )
+        
+        response = cls.login()
 
         cls.driver.quit()
         return response
