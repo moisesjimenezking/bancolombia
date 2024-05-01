@@ -222,8 +222,11 @@ class BanKColom:
                 aux += 1
                 time.sleep(1)
 
-                if newest_file is not None or aux == 90:
+                if newest_file is not None:
                     break
+
+                if aux == 90:
+                    raise Exception("timeout", 404)
                 
         return {
             "response":response,
