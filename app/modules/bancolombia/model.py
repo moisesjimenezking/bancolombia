@@ -183,19 +183,6 @@ class BanKColom:
         response = eval(content) if len(content) > 1 else {"file_url":None}
         host = request.host_url
 
-        if response["file_url"] is None:
-            files = [file for file in os.listdir("config/logs/movements/") if file.endswith(f"_{nit}.pdf")]
-            filesAux = [file for file in os.listdir("config/logs/movements/") if file.endswith(f".pdf") and start_date in file]
-            newest_file = None
-            if len(files) > 0:
-                newest_file = host+"pdf/"+files[0]
-            else:
-                if len(filesAux) > 0:
-                    newest_file = host+"pdf/"+filesAux[0]
-
-
-            response["file_url"] = newest_file
-
         startDate = datetime.strptime(start_date, "%Y-%m-%d")
         end_date  = (startDate - timedelta(days=1)).strftime("%Y-%m-%d")
         listTime = [start_date, end_date]
@@ -219,6 +206,25 @@ class BanKColom:
             cls.removeGeko()
             cls.daemonInit(listTime, accountData, nit, host)
 
+        if response["file_url"] is None:
+            aux = 0
+            while True:
+                files = [file for file in os.listdir("config/logs/movements/") if file.endswith(f"_{nit}.pdf")]
+                filesAux = [file for file in os.listdir("config/logs/movements/") if file.endswith(f".pdf") and start_date in file]
+                newest_file = None
+                if len(files) > 0:
+                    newest_file = host+"pdf/"+files[0]
+                else:
+                    if len(filesAux) > 0:
+                        newest_file = host+"pdf/"+filesAux[0]
+
+                response["file_url"] = newest_file
+                aux += 1
+                time.sleep(1)
+
+                if newest_file is not None or aux == 90:
+                    break
+                
         return {
             "response":response,
             "status_http":200
