@@ -832,3 +832,95 @@ query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052')
 ##############################
 
 
+
+##############################
+
+
+Fecha   : 2024-05-01 20:19:28
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : max() arg is an empty sequence
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult?boxCc=2528&cc=76323909&nit=901615052
+    
+origin  : 172.17.0.1
+
+query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052')])
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-05-01 20:42:23
+
+Mensaje : 2
+
+Error   : [Errno 2] No such file or directory: 'movimientos_2024-05-01_901615052.pdf'
+
+Estatus : No such file or directory
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult?boxCc=2528&cc=76323909&nit=901615052
+    
+origin  : 172.17.0.1
+
+query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052')])
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-05-01 21:01:39
+
+Mensaje : 2
+
+Error   : [Errno 2] No such file or directory: 'cache_2024-05-01_901615052.txt'
+
+Estatus : No such file or directory
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult?boxCc=2528&cc=76323909&nit=901615052
+    
+origin  : 172.17.0.1
+
+query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052')])
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-05-01 21:14:15
+
+Mensaje : 2
+
+Error   : [Errno 2] No such file or directory: 'config/logs/movements_block/block.txt'
+
+Estatus : No such file or directory
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult?boxCc=2528&cc=76323909&nit=901615052
+    
+origin  : 172.17.0.1
+
+query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052')])
+
+##############################
+
+

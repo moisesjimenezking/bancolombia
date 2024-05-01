@@ -8,7 +8,7 @@ from . import handle_error_bancolombia, getRequestData, app
 def controllerCode():
     try:
         listRoutes = {
-            "/consult" : [BanKColom.consult, None]
+            "/consult" : [BanKColom.consultV2, None]
         }
 
         key = (

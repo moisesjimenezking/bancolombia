@@ -11,10 +11,13 @@ from selenium.common.exceptions import TimeoutException
 from weasyprint import HTML
 from fpdf import FPDF
 from flask import request
+from createApp import app
 import time
 import logging
 import os
 import json
+import threading
+
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -155,64 +158,138 @@ class ScriptBancolombia:
 
 class BanKColom:
     @classmethod
-    def consult(cls, data):
-        if "start_date" not in data:
-            data["start_date"] = datetime.now().strftime("%Y-%m-%d")
+    def consultV2(cls, data):
+        start_date = data["start_date"] if "start_date" in data else datetime.now().strftime("%Y-%m-%d")
+        data.pop("start_date", None)
 
-        accountData = dict()
-        if "nit" in data:
-            accountData.update({"nit":data["nit"]})
-        
-        if "cc" in data:
-            accountData.update({"cc":data["cc"]})
+        accountData = data
+        nit = data["nit"] if "nit" in data else "default"
 
-        if "boxCc" in data:
-            accountData.update({"boxCc":data["boxCc"]})
+        cls.createDir()
 
-        newCache = False
-
-        ruteLog = "config/logs/movements_cache/cache_{}.txt".format(data["start_date"])
-        if os.path.exists(ruteLog):
-            createTime = os.path.getctime(ruteLog)
-            currentTime = time.time()
-            if currentTime - createTime < 90:
-                with open(ruteLog, 'r') as archivo:
+        try:
+            ruteCache = "config/logs/movements_cache/cache_{}_{}.txt".format(data["start_date"], nit)
+            with open(ruteCache, 'r') as archivo:
+                content = archivo.read()
+        except:
+            files = [file for file in os.listdir("config/logs/movements_cache/") if file.endswith(f"_{nit}.txt")]
+            if len(files) > 0:
+                newest_file = files[0]
+                with open("config/logs/movements_cache/" + newest_file, 'r') as archivo:
                     content = archivo.read()
-                
-                response = eval(content)
             else:
-                os.remove(ruteLog)
-                newCache = True
-        else:
-            newCache = True
+                content = ""
+
+        response = eval(content) if len(content) > 1 else {"file_url":None}
+        host = request.host_url
+
+        if response["file_url"] is None:
+            files = [file for file in os.listdir("config/logs/movements/") if file.endswith(f"_{nit}.pdf")]
+            newest_file = None
+            if len(files) > 0:
+                newest_file = host+"pdf/"+files[0]
+
+            response["file_url"] = newest_file
+
+        startDate = datetime.strptime(start_date, "%Y-%m-%d")
+        end_date  = (startDate - timedelta(days=1)).strftime("%Y-%m-%d")
+        listTime = [start_date, end_date]
+
+        host = request.host_url
+        
+        newCache = True
+        ruteblock = "config/logs/movements_block/block.txt"
+        if os.path.exists(ruteblock):
+            createTime = os.path.getctime(ruteblock)
+            currentTime = time.time()
+            if currentTime - createTime <= 300:
+                newCache = False
+            else:
+                os.remove(ruteblock)
 
         if newCache:
-            start_date = datetime.strptime(data["start_date"], "%Y-%m-%d")
-            end_date  = (start_date - timedelta(days=1))
-
-            listTime = [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]
-
+            with open(ruteblock, 'w') as archivo:
+                archivo.write("block")
+        
             cls.removeGeko()
-
-            result = ScriptBancolombia.initialize(listTime, accountData)
-
-            rute = cls.buildPdf(result["movements"])
-            # text = cls.buildText(result["text"])
-
-            response = {"file_url":rute["rute"]}
-
-            ruteDirectori = "config/logs/movements_cache/"
-            if not os.path.exists(ruteDirectori):
-                os.makedirs(ruteDirectori)
-
-            with open(ruteLog, 'w') as archivo:
-                archivo.write(json.dumps(response))
+            cls.daemonInit(listTime, accountData, nit, host)
 
         return {
             "response":response,
             "status_http":200
         }
     
+    @classmethod
+    def createDir(cls):
+        ruteDirectori = "config/logs/movements_cache/"
+        if not os.path.exists(ruteDirectori):
+            os.makedirs(ruteDirectori)
+
+        ruteLog = "config/logs/movements/"
+        if not os.path.exists(ruteLog):
+            os.makedirs(ruteLog)
+
+        ruteBlock = "config/logs/movements_block/"
+        if not os.path.exists(ruteBlock):
+            os.makedirs(ruteBlock)
+
+    @classmethod
+    def daemonInit(cls, listTime, accountData, nit, host):
+        background_thread = threading.Thread(target=cls.daemon, args=(listTime, accountData, nit, host))
+        background_thread.daemon = True
+        background_thread.start()
+        
+        return True
+    
+    @classmethod
+    def daemon(cls, listTime, accountData, nit, host):
+        with app.app_context():
+            try:
+                result = ScriptBancolombia.initialize(listTime, accountData)
+            except Exception:
+                ruteblock = "config/logs/movements_block/block.txt"
+                if os.path.exists(ruteblock):
+                    os.remove(ruteblock)
+                raise Exception("Error Script", 404)
+            
+            movements = result["movements"]
+
+            #? BLOCK PDF 
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size=10)
+
+            col_widths = [10, 30, 40, 100]
+
+            pdf.cell(col_widths[0], 10, "Nª", border=1, align='C')
+            pdf.cell(col_widths[1], 10, "Fecha", border=1, align='C')
+            pdf.cell(col_widths[2], 10, "Monto", border=1, align='C')
+            pdf.cell(col_widths[3], 10, "Descripción", border=1, ln=True, align='C')
+        
+            aux = 1
+            for item in movements:
+                pdf.cell(col_widths[0], 10, f"#{aux}", border=1, align='C')
+                pdf.cell(col_widths[1], 10, item['date'], border=1, align='C')
+                pdf.cell(col_widths[2], 10, item['amount'], border=1, align='C')
+                pdf.cell(col_widths[3], 10, item['description'], border=1, ln=True, align='C')
+
+                aux += 1
+
+            archive = "movimientos_{}_{}.pdf".format(datetime.now().strftime("%Y-%m-%d"), nit)
+            pdf.output("config/logs/movements/"+archive)
+
+            rute = "{}pdf/{}".format(host, archive)
+
+            ruteCache = "config/logs/movements_cache/cache_{}_{}.txt".format(datetime.now().strftime("%Y-%m-%d"), nit)
+            response = {"file_url":rute}
+
+            with open(ruteCache, 'w') as archivo:
+                archivo.write(json.dumps(response))
+
+            ruteblock = "config/logs/movements_block/block.txt"
+            if os.path.exists(ruteblock):
+                os.remove(ruteblock)
+
     @classmethod
     def removeGeko(cls):
         try:
@@ -224,46 +301,3 @@ class BanKColom:
                 logging.debug(f"El archivo {file_path} no existe.")
         except Exception:
             pass
-        
-    @classmethod
-    def buildText(cls, data):
-        listText = data.split("\n")
-        listText = listText[:10]
-
-        text = ""
-        for x in range(len(listText)):
-            text = text + "#{} | {} \n".format(x+1, listText[x])
-
-        return {"text":text}
-    
-    @classmethod
-    def buildPdf(cls, data):
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size=10)
-
-        col_widths = [10, 30, 40, 100]
-
-        pdf.cell(col_widths[0], 10, "Nª", border=1, align='C')
-        pdf.cell(col_widths[1], 10, "Fecha", border=1, align='C')
-        pdf.cell(col_widths[2], 10, "Monto", border=1, align='C')
-        pdf.cell(col_widths[3], 10, "Descripción", border=1, ln=True, align='C')
-        
-        aux = 1
-        for item in data:
-            pdf.cell(col_widths[0], 10, f"#{aux}", border=1, align='C')
-            pdf.cell(col_widths[1], 10, item['date'], border=1, align='C')
-            pdf.cell(col_widths[2], 10, item['amount'], border=1, align='C')
-            pdf.cell(col_widths[3], 10, item['description'], border=1, ln=True, align='C')
-
-            aux += 1
-
-        ruteLog = "config/logs/movements/"
-        if not os.path.exists(ruteLog):
-            os.makedirs(ruteLog)
-
-        archive = "movimientos_{}.pdf".format(datetime.now().strftime("%Y-%m-%d"))
-        # Guardar el PDF en un archivo
-        pdf.output(ruteLog+archive)
-
-        return {"rute":"{}pdf/{}".format(request.host_url, archive)}
