@@ -29,29 +29,36 @@ class ScriptBancolombia:
 
 
     @classmethod
-    def initialize(cls, data):
-        cls.listTime = data
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
-        options = Options()
-        options.add_argument("--headless")
-        options.add_argument(f"--user-agent={user_agent}")
-        options.add_argument("--disable-blink-features=AutomationControlled")
-        options.binary_location = '/usr/bin/firefox-esr'
+    def initialize(cls, listTimeInit, account):
+        cls.listTime = listTimeInit
+        cls.CC    = account["cc"] if "cc" in account else cls.CC
+        cls.NIT   = account["nit"] if "nit" in account else cls.NIT
+        cls.boxCC = account["boxCc"] if "boxCc" in account else cls.boxCC
 
-        cls.driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
+        for x in range(3):
+            user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36"
+            options = Options()
+            options.add_argument("--headless")
+            options.add_argument(f"--user-agent={user_agent}")
+            options.add_argument("--disable-blink-features=AutomationControlled")
+            options.binary_location = "/usr/bin/firefox-esr"
 
-        # error = False
+            cls.driver = webdriver.Firefox(
+                service=FirefoxService(GeckoDriverManager().install()), options=options
+            )
+            
+            try:
+                response = cls.login()
+                continueWhile = False
+            except Exception:
+                cls.driver.quit()
+                continueWhile = True
 
-        # try:
-        response = cls.login()
-        # except Exception as e:
-        #     cls.driver.quit()
-        #     error = True
+            if not continueWhile:
+                break
 
-        # if error:
-        #     raise Exception("Fallo el web Scraping", 400)
+            BanKColom.removeGeko()
 
-        time.sleep(1)
         cls.driver.quit()
         return response
 
@@ -162,7 +169,17 @@ class BanKColom:
     def consult(cls, data):
         if "start_date" not in data:
             data["start_date"] = datetime.now().strftime("%Y-%m-%d")
+
+        accountData = dict()
+        if "nit" in data:
+            accountData.update("nit", data["nit"])
         
+        if "cc" in data:
+            accountData.update("cc", data["cc"])
+
+        if "boxCc" in data:
+            accountData.update("boxCc", data["boxCc"])
+
         newCache = False
 
         ruteLog = "config/logs/movements_cache/cache_{}.txt".format(data["start_date"])
@@ -188,12 +205,12 @@ class BanKColom:
 
             cls.removeGeko()
 
-            result = ScriptBancolombia.initialize(listTime)
+            result = ScriptBancolombia.initialize(listTime, accountData)
 
             rute = cls.buildPdf(result["movements"])
-            text = cls.buildText(result["text"])
+            # text = cls.buildText(result["text"])
 
-            response = {"text":text["text"], "file_url":rute["rute"]}
+            response = {"file_url":rute["rute"]}
 
             ruteDirectori = "config/logs/movements_cache/"
             if not os.path.exists(ruteDirectori):
