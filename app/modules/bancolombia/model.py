@@ -172,13 +172,13 @@ class BanKColom:
 
         accountData = dict()
         if "nit" in data:
-            accountData.update("nit", data["nit"])
+            accountData.update({"nit":data["nit"]})
         
         if "cc" in data:
-            accountData.update("cc", data["cc"])
+            accountData.update({"cc":data["cc"]})
 
         if "boxCc" in data:
-            accountData.update("boxCc", data["boxCc"])
+            accountData.update({"boxCc":data["boxCc"]})
 
         newCache = False
 

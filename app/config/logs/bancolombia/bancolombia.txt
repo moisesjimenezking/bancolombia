@@ -786,3 +786,49 @@ query   : {'start_date': '2024-05-01'}
 ##############################
 
 
+
+##############################
+
+
+Fecha   : 2024-05-01 15:23:45
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : update expected at most 1 argument, got 2
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult?boxCc=2528&cc=76323909&nit=901615052
+    
+origin  : 172.17.0.1
+
+query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052'), ('start_date', '2024-05-01')])
+
+##############################
+
+
+
+##############################
+
+
+Fecha   : 2024-05-01 15:24:45
+
+Mensaje : Se ha producido un error en la aplicación. Por favor, intenta nuevamente más tarde.
+
+Error   : dictionary update sequence element #0 has length 3; 2 is required
+
+Estatus : 400
+
+method  : GET
+
+rute    : http://127.0.0.1:23301/api/v1/consult?boxCc=2528&cc=76323909&nit=901615052
+    
+origin  : 172.17.0.1
+
+query   : MultiDict([('boxCc', '2528'), ('cc', '76323909'), ('nit', '901615052'), ('start_date', '2024-05-01')])
+
+##############################
+
+
