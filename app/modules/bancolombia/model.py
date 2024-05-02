@@ -168,7 +168,7 @@ class BanKColom:
         cls.createDir()
 
         try:
-            ruteCache = "config/logs/movements_cache/cache_{}_{}.txt".format(data["start_date"], nit)
+            ruteCache = "config/logs/movements_cache/cache_{}_{}.txt".format(start_date, nit)
             with open(ruteCache, 'r') as archivo:
                 content = archivo.read()
         except:
@@ -209,7 +209,7 @@ class BanKColom:
         if response["file_url"] is None:
             aux = 0
             while True:
-                files = [file for file in os.listdir("config/logs/movements/") if file.endswith(f"_{nit}.pdf")]
+                files = [file for file in os.listdir("config/logs/movements/") if file.endswith(f"{start_date}_{nit}.pdf")]
                 filesAux = [file for file in os.listdir("config/logs/movements/") if file.endswith(f".pdf") and start_date in file]
                 newest_file = None
                 if len(files) > 0:
@@ -260,12 +260,14 @@ class BanKColom:
         with app.app_context():
             try:
                 result = ScriptBancolombia.initialize(listTime, accountData)
-            except Exception:
+            except Exception as e:
                 ruteblock = "config/logs/movements_block/block.txt"
                 if os.path.exists(ruteblock):
                     os.remove(ruteblock)
+
+                logging.debug(str(e))
                 raise Exception("Error Script", 404)
-            
+            logging.debug(str("e22"))
             movements = result["movements"]
 
             #? BLOCK PDF 
