@@ -57,7 +57,7 @@ class ScriptBancolombia:
     @classmethod
     def login(cls):
         cls.driver.get("https://sucursalvirtualpyme.bancolombia.com/#/login")
-        cls.wait = WebDriverWait(cls.driver, 15)
+        cls.wait = WebDriverWait(cls.driver, 30)
 
         cls.loginNit()
         time.sleep(1)
@@ -90,7 +90,7 @@ class ScriptBancolombia:
             end = False
             listMovements = list()
             strMovements = ""
-            time.sleep(5)
+            time.sleep(10)
             table_element = cls.wait.until(EC.presence_of_element_located((By.ID, 'tblMyMovements')))
             rows = table_element.find_elements(By.TAG_NAME, 'tr')
 
@@ -220,7 +220,7 @@ class BanKColom:
 
                 response["file_url"] = newest_file
                 aux += 1
-                time.sleep(1)
+                time.sleep(2)
 
                 if newest_file is not None:
                     break

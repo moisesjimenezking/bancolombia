@@ -1,2 +1,2 @@
 .env
-app/config/logs/
+app/config/logs/*
